@@ -79,6 +79,7 @@ function App() {
 
         setcolumnData(chartData);
       });
+
   };
 
   const onSearch = (value) => console.log(value);
