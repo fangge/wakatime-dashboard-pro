@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import './App.scss';
-import { Layout, Select, DatePicker, Space, Input } from 'antd';
+import { Layout, Select, DatePicker, Space, Input, message } from 'antd';
 import { GithubOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import Axios from 'axios';
@@ -44,12 +44,15 @@ function App() {
   const [dates, setDates] = useState([]);
   const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
 
+
   useEffect(() => {
     fetchSummariesData();
     if (localStorage.getItem('gistId')) {
       setgistId(localStorage.getItem('gistId'));
+    } else {
+      message.info('Please Enter Yout GistId');
     }
-  }, [selecthide,endDate]);
+  }, [gistId, selecthide, endDate, selectedValue]);
 
   const fetchSingleFile = (response = {}) => {
     const {
@@ -141,7 +144,7 @@ function App() {
           enterButton
           placeholder="Enter Your Gist Id"
           className="gist-input"
-          defaultValue={gistId}
+          value={gistId}
         />
       </Header>
       <Content style={{ padding: '0 50px' }}>
@@ -163,7 +166,7 @@ function App() {
           <Space size={12}>
             <RangePicker
               onCalendarChange={(val) => {
-                if (val && val[1]==null) {
+                if (val == null || val[1] == null) {
                   setselecthide(false);
                 } else {
                   setselecthide(true);
@@ -179,7 +182,7 @@ function App() {
         </div>
 
         <div className="site-layout-content">
-          {gistId && <Column columnData={columnData} />}
+          {gistId && <Column columnData={columnData}/>}
           {!gistId && (
             <svg
               t="1623896018865"

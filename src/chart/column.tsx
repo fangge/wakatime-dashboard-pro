@@ -22,7 +22,16 @@ const DemoColumn: React.FC = (param) => {
     return moment(date).format('YYYYMMDD');
   };
   const [data, setdata] = useState([]);
+  const [darkmode, setdarkmode] = useState(false);
+
   useEffect(() => {
+    if (
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    ) {
+      // dark mode do something
+      setdarkmode(true);
+    }
     let datalist = [];
     param.columnData.forEach((element) => {
       const currentDate = getFormateDate(element.range.date);
@@ -52,6 +61,7 @@ const DemoColumn: React.FC = (param) => {
       { type: 'element-highlight-by-color' },
       { type: 'element-link' },
     ],
+    theme: darkmode ? 'dark' : '',
     legend: false,
     tooltip: {
       formatter: function formatter(datum) {
