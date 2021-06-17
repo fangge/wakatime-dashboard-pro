@@ -44,7 +44,6 @@ function App() {
   const [dates, setDates] = useState([]);
   const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
 
-
   useEffect(() => {
     fetchSummariesData();
     if (localStorage.getItem('gistId')) {
@@ -74,8 +73,6 @@ function App() {
       // 选取已选中的天数
       filesNames = filesKeysArr.slice(startIndex);
     }
-
-    console.log('filesNames: ', filesNames);
 
     filesNames.forEach((fileName) => {
       // eslint-disable-next-line
@@ -182,7 +179,7 @@ function App() {
         </div>
 
         <div className="site-layout-content">
-          {gistId && <Column columnData={columnData}/>}
+          {gistId && <Column columnData={columnData} />}
           {!gistId && (
             <svg
               t="1623896018865"
