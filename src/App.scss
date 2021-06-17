@@ -1,3 +1,6 @@
+body{
+  background: #f0f2f5;
+}
 .site-layout-content {
   padding: 24px;
   background: #fff;
@@ -22,4 +25,9 @@
 .waka-hd{
   display: flex;
   align-items: center;
+}
+.empty{
+  display: block;
+  width: 100px;
+  margin: 50px auto;
 }

@@ -23,7 +23,6 @@ const DemoColumn: React.FC = (param) => {
   };
   const [data, setdata] = useState([]);
   useEffect(() => {
-    console.log(param.columnData);
     let datalist = [];
     param.columnData.forEach((element) => {
       const currentDate = getFormateDate(element.range.date);
@@ -37,7 +36,7 @@ const DemoColumn: React.FC = (param) => {
         });
       });
     });
-    console.log('datalist', datalist);
+
     setdata(datalist);
   }, [param.columnData]);
 
@@ -77,7 +76,6 @@ const DemoColumn: React.FC = (param) => {
           const { x, y } = evt;
           const { xField } = plot.options;
           const tooltipData = plot.chart.getTooltipItems({ x, y });
-          console.log(tooltipData);
         });
       }}
     />
