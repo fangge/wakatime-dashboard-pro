@@ -56,7 +56,6 @@ const DemoColumn: React.FC = (param) => {
     yField: 'value',
     seriesField: 'projects',
     scrollbar: { type: 'horizontal' },
-    tooltip: false,
     interactions: [
       { type: 'element-highlight-by-color' },
       { type: 'element-link' },

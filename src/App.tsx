@@ -1,12 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import './App.scss';
-import { Layout, Select, DatePicker, Space, Input, message } from 'antd';
+import {
+  Layout,
+  Select,
+  DatePicker,
+  Space,
+  Input,
+  message,
+  Row,
+  Col,
+} from 'antd';
 import { GithubOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import Axios from 'axios';
 import { getLastData, secondsFormat, swap } from '@/utils/utils';
 import Column from '@/chart/column';
+import TreeMap from '@/chart/treemap';
+import Pie from '@/chart/pie';
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
@@ -100,7 +111,6 @@ function App() {
           }, []);
 
           const chartData = getLastData(data);
-          console.log('chartData: ', chartData);
 
           setcolumnData(chartData);
         });
@@ -167,7 +177,7 @@ function App() {
                   setselecthide(false);
                 } else {
                   setselecthide(true);
-                  setdiffdays(val[1].diff(val[0], 'days')); // 相差天数
+                  setdiffdays(val[1].diff(val[0], 'days')); // diff days
                   setEndDate(val[1].format('YYYY-MM-DD'));
                   setDates(val);
                 }
@@ -179,7 +189,22 @@ function App() {
         </div>
 
         <div className="site-layout-content">
-          {gistId && <Column columnData={columnData} />}
+          {gistId && (
+            <div className="chart-detail">
+              <h2>Project Overview</h2>
+              <Column columnData={columnData} />
+              <Row>
+                <Col span={12}>
+                  <h2>General overview of projects time in the interval</h2>
+                  <TreeMap columnData={columnData} />
+                </Col>
+                <Col span={12}>
+                  <h2>Languages</h2>
+                  <Pie columnData={columnData} />
+                </Col>
+              </Row>
+            </div>
+          )}
           {!gistId && (
             <svg
               t="1623896018865"
