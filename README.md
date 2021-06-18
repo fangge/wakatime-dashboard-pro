@@ -23,7 +23,12 @@
 ```
 
 ## 项目构建
-Vite + React
+### Usage
 ```bash
+git clonehttps://github.com/fangge/wakatime-dashboardv2.git && cd wakatime-dashboardv2
 npm i && npm run dev
+```
+### build
+```bash
+npm run build
 ```
