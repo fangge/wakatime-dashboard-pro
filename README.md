@@ -25,7 +25,7 @@
 
 ### Oauth Apps
 
-因为https://api.github.com/gists 这个方法请求 gist 每日是有次数限制的，如果你觉得你可能需要多次访问，可以新建一个 Oauth Apps，创建地址：[https://github.com/settings/developers](https://github.com/settings/developers)
+因为https://api.github.com/gists 这个方法请求 gist 每日是有次数限制的，如果你觉得项目可能需要多次访问，建议可以新建一个 Oauth Apps，创建地址：[https://github.com/settings/developers](https://github.com/settings/developers)
 ![创建](https://diy-assets.msstatic.com/mrfangge/sce.png)
 
 创建好后，你请求的地址就改成
