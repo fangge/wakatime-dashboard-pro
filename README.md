@@ -23,6 +23,7 @@
 ```
 
 ## 项目构建
+Vite + React + Ant Design + Ant Design Charts
 ### Usage
 ```bash
 git clonehttps://github.com/fangge/wakatime-dashboardv2.git && cd wakatime-dashboardv2
