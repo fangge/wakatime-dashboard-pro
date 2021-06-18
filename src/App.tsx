@@ -101,7 +101,7 @@ function App() {
       return;
     } else {
       return Axios.get(
-        `https://api.github.com/gists/${gistid}?client_id=7ae184ba869452c9995c&client_secret=93bc3051c608b22307c37e15ac2f204373c9e080`
+        `https://api.github.com/gists/${gistid}`
       )
         .then((response) => fetchSingleFile(response))
         .then((values) => {
@@ -146,10 +146,10 @@ function App() {
         <Search
           align="center"
           onSearch={onSearch}
+          allowClear={true}
           enterButton
           placeholder="Enter Your Gist Id"
           className="gist-input"
-          value={gistId}
         />
       </Header>
       <Content style={{ padding: '0 50px' }}>
