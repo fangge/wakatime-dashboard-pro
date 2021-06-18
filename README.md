@@ -26,7 +26,7 @@
 
 ## 项目构建
 
-[Vite](https://cn.vitejs.dev/) + [React](https://zh-hans.reactjs.org/) + (Ant Design)[https://ant.design/index-cn] + [Ant Design Charts](https://charts.ant.design/)
+[Vite](https://cn.vitejs.dev/) + [React](https://zh-hans.reactjs.org/) + [Ant Design](https://ant.design/index-cn) + [Ant Design Charts](https://charts.ant.design/)
 
 ### Usage
 
