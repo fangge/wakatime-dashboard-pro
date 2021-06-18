@@ -118,14 +118,12 @@ function App() {
   };
 
   const onSearch = (value) => {
-    console.log(value);
     if (value) {
       localStorage.setItem('gistId', value);
       setgistId(value);
     }
   };
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
     setselectedValue(value);
   };
   const handleData = (time) => {

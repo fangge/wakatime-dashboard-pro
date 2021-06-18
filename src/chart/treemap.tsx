@@ -25,7 +25,7 @@ const DemoTreemap: React.FC= (param) => {
           value: datalist[i].value,
         });
       }
-      console.log(children);
+
       setdata({
         name: 'root',
         children,
