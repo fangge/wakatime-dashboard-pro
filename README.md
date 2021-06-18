@@ -31,7 +31,7 @@
 ### Usage
 
 ```bash
-git clonehttps://github.com/fangge/wakatime-dashboardv2.git && cd wakatime-dashboardv2
+git clone https://github.com/fangge/wakatime-dashboardpro.git && cd wakatime-dashboardv2
 npm i && npm run dev
 ```
 
