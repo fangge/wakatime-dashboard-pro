@@ -32,14 +32,15 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
     - name: Install vite dependencies
-      # 下载 hexo-cli 脚手架及相关安装包
+      # 下载 vite 脚手架及相关安装包
       run: |
+        npm i vite -g
         npm install
 
     - name: Generate files
-      # 编译 markdown 文件
+      # 编译 项目 文件，BASE_DOMAIN是你个人域名的构建基础路径，
       run: |
-        npm run build
+        vite build --base=${{ secrets.BASE_DOMAIN }}
 
     - name: Deploy WakaTime Dashboard
       env: 
