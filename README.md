@@ -4,6 +4,8 @@
 
 原大神项目地址：https://github.com/superman66/wakatime-dashboard
 
+[Demo](https://www.mrfangge.com/wakatime-dashboard-pro/)
+
 感谢大神弄了那么方便的 wakatime 图表展示，因为自己本身也是 wakatime 的忠实粉丝，很喜欢回看自己的编程数据
 
 但是原来的这个项目虽然自己 fork 了之后加上了时间，也有 push 一个 request 给大神一个访问 gist 数据方式的优化，但终究还是觉得自己重新折腾一下，增加一些数据展示会清晰一些，所以制作了这个自称 pro 的版本
@@ -50,3 +52,10 @@ npm i && npm run dev
 ```bash
 npm run build
 ```
+
+## Github Action搭配Page使用
+> 本项目默认分支是设置了source，然后将构建好的文件推送到master分支，然后github page生成的时候读取的是master分支内的文件，可在``.github/workflows/main.yml``中修改相关分支，已写相关注释
+
+在项目的**Setting**中增加两个参数：ACCESS_TOKEN 和 BASE_DOMAIN
+![](https://diy-assets.msstatic.com/mrfangge/sc2.jpg)
+其中BASE_DOMAIN可选，如果你的Github Page自定义了域名，则需要添加，如果不需要，可自行在yml中删除构建的--base参数
