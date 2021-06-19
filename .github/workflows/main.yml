@@ -4,7 +4,7 @@ name: WakaTime DashBoard CI/CD
 on:
   push:
     branches: 
-      - master
+      - source
 
 env:
   TZ: Asia/Shanghai
@@ -52,7 +52,7 @@ jobs:
         git config user.email "fangge-sun@163.com"
         git add .
         git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
-        git push --force --quiet "https://${{ secrets.ACCESS_TOKEN }}@$GITHUB_REPO" publish:publish
+        git push --force --quiet "https://${{ secrets.ACCESS_TOKEN }}@$GITHUB_REPO" master:master
 
 
 
