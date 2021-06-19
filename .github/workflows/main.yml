@@ -1,0 +1,59 @@
+name: WakaTime DashBoard CI/CD
+
+# 触发条件：在 push 到 hexo-blog-backup 分支后触发
+on:
+  push:
+    branches: 
+      - master
+
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  waka-cicd:
+    name: WakaDashboard build & deploy
+    runs-on: ubuntu-latest # 使用最新的 Ubuntu 系统作为编译部署的环境
+
+    steps:
+    - name: Checkout codes
+      uses: actions/checkout@v2
+
+    - name: Setup node
+      # 设置 node.js 环境
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+
+    - name: Cache node modules
+      # 设置包缓存目录，避免每次下载
+      uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+    - name: Install vite dependencies
+      # 下载 hexo-cli 脚手架及相关安装包
+      run: |
+        npm install
+
+    - name: Generate files
+      # 编译 markdown 文件
+      run: |
+        npm run build
+
+    - name: Deploy hexo blog
+      env: 
+        # Github 仓库
+        GITHUB_REPO: github.com/fangge/wakatime-dashboard-pro
+      # 将编译后的博客文件推送到指定仓库
+      run: |
+        cd ./dist && git init && git add .
+        git config user.name "mrfangge"
+        git config user.email "fangge-sun@163.com"
+        git add .
+        git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
+        git push --force --quiet "https://${{ secrets.ACCESS_TOKEN }}@$GITHUB_REPO" publish:publish
+
+
+
+        
