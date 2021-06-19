@@ -41,7 +41,7 @@ jobs:
       run: |
         npm run build
 
-    - name: Deploy hexo blog
+    - name: Deploy WakaTime Dashboard
       env: 
         # Github 仓库
         GITHUB_REPO: github.com/fangge/wakatime-dashboard-pro
