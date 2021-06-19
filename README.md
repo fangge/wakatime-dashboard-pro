@@ -58,4 +58,5 @@ npm run build
 
 在项目的**Setting**中增加两个参数：ACCESS_TOKEN 和 BASE_DOMAIN
 ![](https://diy-assets.msstatic.com/mrfangge/sc2.jpg)
-其中BASE_DOMAIN可选，如果你的Github Page自定义了域名，则需要添加，如果不需要，可自行在yml中删除构建的--base参数
+- **ACCESS_TOKEN**： 在[Personal access tokens](https://github.com/settings/tokens) 中新建token
+- **BASE_DOMAIN**：BASE_DOMAIN可选，如果你的Github Page自定义了域名，则需要添加，如果不需要，可自行在yml中删除构建的--base参数
