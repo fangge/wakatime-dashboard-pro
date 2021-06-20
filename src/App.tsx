@@ -189,7 +189,6 @@ function App() {
         <div className="site-layout-content">
           {gistId && (
             <div className="chart-detail">
-              <h2>Project Overview</h2>
               <Column columnData={columnData} />
               <Row>
                 <Col span={12}>

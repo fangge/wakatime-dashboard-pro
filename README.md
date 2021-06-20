@@ -4,7 +4,7 @@
 
 原大神项目地址：https://github.com/superman66/wakatime-dashboard
 
-[Demo](https://wakatime.mrfangge.com/)
+[Demo](https://wakatime.mrfangge.com/`)
 
 感谢大神弄了那么方便的 wakatime 图表展示，因为自己本身也是 wakatime 的忠实粉丝，很喜欢回看自己的编程数据
 
