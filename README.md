@@ -13,9 +13,13 @@ This project is use for conveniently view your wakatime information. It contains
 - **Daily column chart** project information
 - **Treemap** of the projects within the selected time
 - **Languages** of the projects within the selected time
-- **Editors of** the projects within the selected time
+- **Editors** of the projects within the selected time
 
-*Feature: Adapt to dark night mode*
+
+*Feature:*
+1. Adapt to dark night mode
+2. Overview data through the calendar
+3. Support download the image of chart
 
 ## Table of Contents
 
