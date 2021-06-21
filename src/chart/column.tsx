@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import { DualAxes, G2 } from '@ant-design/charts';
-import Item from 'antd/lib/list/Item';
+import { Button } from 'antd';
+import { DownloadOutlined } from '@ant-design/icons';
 
 const DemoColumn: React.FC = (param) => {
   G2.registerInteraction('element-link', {
@@ -24,6 +25,17 @@ const DemoColumn: React.FC = (param) => {
   const [data, setdata] = useState([]);
   const [data2, setdata2] = useState([]);
   const [darkmode, setdarkmode] = useState(false);
+  const ref = useRef();
+
+  // 导出图片
+  const downloadImage = () => {
+    ref.current?.downloadImage();
+  };
+
+  // 获取图表 base64 数据
+  const toDataURL = () => {
+    console.log(ref.current?.toDataURL());
+  };
 
   useEffect(() => {
     if (
@@ -115,20 +127,21 @@ const DemoColumn: React.FC = (param) => {
     ],
     theme: darkmode ? 'dark' : '',
     legend: false,
-    
   };
 
   return (
-    <DualAxes
-      {...config}
-      onReady={(plot) => {
-        plot.on('plot:click', (evt) => {
-          const { x, y } = evt;
-          const { xField } = plot.options;
-          const tooltipData = plot.chart.getTooltipItems({ x, y });
-        });
-      }}
-    />
+    <div className="char1">
+      <Button
+        type="primary"
+        shape="round"
+        icon={<DownloadOutlined />}
+        size={'large'}
+        onClick={downloadImage}
+      >
+        Download Chart
+      </Button>
+      <DualAxes chartRef={ref} {...config} />
+    </div>
   );
 };
 

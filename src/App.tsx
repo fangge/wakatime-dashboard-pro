@@ -18,6 +18,7 @@ import { getLastData, secondsFormat, swap } from '@/utils/utils';
 import Column from '@/chart/column';
 import TreeMap from '@/chart/treemap';
 import Pie from '@/chart/pie';
+import Editors from '@/chart/editors';
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
@@ -100,9 +101,7 @@ function App() {
     if (!gistid) {
       return;
     } else {
-      return Axios.get(
-        `https://api.github.com/gists/${gistid}`
-      )
+      return Axios.get(`https://api.github.com/gists/${gistid}`)
         .then((response) => fetchSingleFile(response))
         .then((values) => {
           const data = values.reduce((sum, current) => {
@@ -137,7 +136,7 @@ function App() {
     <Layout className="layout">
       <Header className="waka-hd">
         <a
-          href="https://github.com/fangge/wakatime-dashboardv2"
+          href="https://github.com/fangge/wakatime-dashboard-pro"
           target="_blank"
         >
           <GithubOutlined />
@@ -152,7 +151,7 @@ function App() {
           className="gist-input"
         />
       </Header>
-      <Content style={{ padding: '0 50px' }}>
+      <Content style={{ padding: '0 20px' }}>
         <div className="waka-select">
           <Select
             defaultValue="Last 7 Days"
@@ -200,6 +199,8 @@ function App() {
                   <Pie columnData={columnData} />
                 </Col>
               </Row>
+
+              <Editors columnData={columnData}></Editors>
             </div>
           )}
           {!gistId && (

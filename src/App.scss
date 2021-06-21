@@ -2,6 +2,13 @@
 body{
   background: #f0f2f5;
 }
+.ant-layout-header{
+  padding:0 20px;
+  a{
+    white-space: nowrap;
+  }
+}
+
 .site-layout-content {
   padding: 24px;
   background: #fff;
