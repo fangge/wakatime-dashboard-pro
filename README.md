@@ -51,7 +51,7 @@ npm run build
 ```
 
 *Tips:* Because``https://api.github.com/gists`` this api has daily request limit，you can creat an Oauth Apps to increase the limit ，link：[https://github.com/settings/developers](https://github.com/settings/developers)
-![创建](https://diy-assets.msstatic.com/mrfangge/sce.png)
+![创建](/img/secres.png)
 
 After creating the apps, your api url will change like this
 
@@ -62,6 +62,11 @@ After creating the apps, your api url will change like this
 
 ## Github Action
 This project support to commit your build product to the branch by [Github Action](https://docs.github.com/en/actions)，of course you can set the github pages base on your branch. Get more detail in [Action Config](https://github.com/fangge/wakatime-dashboard-pro/blob/source/.github/workflows/main.yml)
+
+Remember to add two secrets in **Setting**：ACCESS_TOKEN 和 BASE_DOMAIN
+![](https://diy-assets.msstatic.com/mrfangge/sc2.jpg)
+- **ACCESS_TOKEN**：Copy a  token from building in [Personal access tokens](https://github.com/settings/tokens) 
+- **BASE_DOMAIN**：BASE_DOMAIN is not necessary but if your Github Page has custom domain
 
 
 ## Maintainers
