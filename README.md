@@ -2,7 +2,7 @@
 
 > Wakatime Dashboard gets data from Gist.
 
-_This article can also be read in [Chinese](README-zh.md)_
+_This article can also be read in [Chinese](https://github.com/fangge/wakatime-dashboard-pro/blob/source/README_zh.md)_
 
 [![WakaTimeDashboardPro](https://img.shields.io/website-WakatimeDashbordPro-down-green-red/http/shields.io.svg)](https://wakatime.mrfangge.com/)
 
