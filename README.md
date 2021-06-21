@@ -15,12 +15,16 @@ This project is use for conveniently view your wakatime information. It contains
 - **Languages** of the projects within the selected time
 - **Editors of** the projects within the selected time
 
+*Feature: Adapt to dark night mode*
+
 ## Table of Contents
 
 - [Background](#background)
 - [GetReady](#getready)
 - [Install & Build](#install--build)
-- [Usage](#usage)
+- [Github Action](#githubaction)
+- [Maintainers](#maintainers)
+- [Changelog](#changelog)
 
 ## Background
 
@@ -36,14 +40,36 @@ This project is base on your sync waktime data, So please make sure yout sync is
 
 ## Install && Build
 
+- install
 ```bash
 git clone https://github.com/fangge/wakatime-dashboardpro.git && cd wakatime-dashboardv2
 npm i && npm run dev
 ```
-
+-  build
 ```bash
 npm run build
 ```
 
-## Usage
+*Tips:* Because``https://api.github.com/gists`` this api has daily request limit，you can creat an Oauth Apps to increase the limit ，link：[https://github.com/settings/developers](https://github.com/settings/developers)
+![创建](https://diy-assets.msstatic.com/mrfangge/sce.png)
 
+After creating the apps, your api url will change like this
+
+```javascript
+`https://api.github.com/gists/${gistid}?client_id=${client_id}&client_secret={$client_secret}`;
+```
+
+
+## Github Action
+This project support to commit your build product to the branch by [Github Action](https://docs.github.com/en/actions)，of course you can set the github pages base on your branch. Get more detail in [Action Config](https://github.com/fangge/wakatime-dashboard-pro/blob/source/.github/workflows/main.yml)
+
+
+## Maintainers
+
+[@fangge](https://github.com/fangge)
+
+## Changelog
+
+ - *2021/6/21* - Add the Editors Preview \ Change the Column View to the DualAxes View
+ - *2021/6/20* - Fixed some css bug
+ - *2021/6/18* - Adapt to dark night mode
