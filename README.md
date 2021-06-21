@@ -19,7 +19,7 @@ This project is use for conveniently view your wakatime information. It contains
 
 - [Background](#background)
 - [GetReady](#getready)
-- [Install & Build](#install&build)
+- [Install & Build](#install--build)
 - [Usage](#usage)
 
 ## Background
