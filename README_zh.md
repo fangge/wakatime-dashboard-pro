@@ -19,7 +19,7 @@
 4. 增加选择的时间区间内使用的编程语言汇总
 
 ## 使用步骤
-
+> 什么是 [WakaTime](https://wakatime.com/): 简单来说就是一个可以统计你每日开发项目具体信息的一个工具，在对应的编辑器安装插件后，就可以获取到近7天你的代码信息，如果需要获取更多，需要付费升级到高级版
 1. 备份 WakaTime 数据到 Gist 的具体步骤请看：[wakatime-sync](https://github.com/superman66/wakatime-sync)。
 2. 将建好的 GistId 输入到输入框中，即可访问你的项目 Waka 概况
 
