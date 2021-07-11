@@ -46,7 +46,7 @@ This project is base on your sync waktime data, So please make sure yout sync is
 
 - install
 ```bash
-git clone https://github.com/fangge/wakatime-dashboardpro.git && cd wakatime-dashboardv2
+git clone https://github.com/fangge/wakatime-dashboardpro.git && cd wakatime-dashboardpro
 npm i && npm run dev
 ```
 -  build
