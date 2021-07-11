@@ -79,6 +79,7 @@ Remember to add two secrets in **Setting**：ACCESS_TOKEN 和 BASE_DOMAIN
 
 ## Changelog
 
+ - *2021/7/11* - Fix date select and editor bug
  - *2021/6/21* - Add the Editors Preview \ Change the Column View to the DualAxes View
  - *2021/6/20* - Fixed some css bug
  - *2021/6/18* - Adapt to dark night mode
