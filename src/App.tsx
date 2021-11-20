@@ -24,6 +24,11 @@ const { Header, Content, Footer } = Layout;
 const { Option } = Select;
 const { Search } = Input;
 const { RangePicker } = DatePicker;
+/**
+ * 获取距离当前天数的日期
+ * @param AddDayCount
+ * @returns
+ */
 
 function App() {
   const datePickerData = [
@@ -51,77 +56,121 @@ function App() {
   const [selectedValue, setselectedValue] = useState(7);
   const [selecthide, setselecthide] = useState(false);
   const [columnData, setcolumnData] = useState([]);
-  const [gistId, setgistId] = useState('');
-  const [diffdays, setdiffdays] = useState(0);
-  const [dates, setDates] = useState([]);
+  // const [gistId, setgistId] = useState('');
+  const [diffdays, setdiffdays] = useState(datePickerData[0].value);
+  // const [dates, setDates] = useState([]);
   const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
 
   useEffect(() => {
     fetchSummariesData();
-    if (localStorage.getItem('gistId')) {
-      setgistId(localStorage.getItem('gistId'));
+    // if (localStorage.getItem('gistId')) {
+    //   setgistId(localStorage.getItem('gistId'));
+    // } else {
+    //   message.info('Please Enter Yout GistId');
+    // }
+  }, [selecthide, endDate, selectedValue]);
+  const GetDateStr = (AddDayCount, rangeSelect = false) => {
+    const dd = rangeSelect ? new Date(endDate) : new Date();
+    let timesArr = [];
+    let timesArr2 = [];
+    if (!rangeSelect) {
+      dd.setTime(dd.getTime() - 24 * 60 * 60 * 1000);
     } else {
-      message.info('Please Enter Yout GistId');
+      timesArr.push(
+        `summaries_${dd.getFullYear()}-${
+          dd.getMonth() + 1 < 10 ? '0' + (dd.getMonth() + 1) : dd.getMonth() + 1
+        }-${dd.getDate() < 10 ? '0' + dd.getDate() : dd.getDate()}.json`
+      );
     }
-  }, [gistId, selecthide, endDate, selectedValue]);
 
-  const fetchSingleFile = (response = {}) => {
-    const {
-      data: { files },
-    } = response;
+    const ny = dd.getFullYear();
+    //获取AddDayCount天后的日
+
+    for (let i = AddDayCount; i < 0; i++) {
+      dd.setDate(dd.getDate() - 1);
+
+      var y = dd.getFullYear();
+      if (y != ny) break;
+      var m =
+        dd.getMonth() + 1 < 10 ? '0' + (dd.getMonth() + 1) : dd.getMonth() + 1; //获取当前月份的日期，不足10补0
+      var d = dd.getDate() < 10 ? '0' + dd.getDate() : dd.getDate();
+      timesArr.push('summaries_' + y + '-' + m + '-' + d + '.json');
+    }
+    //获取当前几号，不足10补0
+    return timesArr;
+  };
+
+  const fetchSingleFile = () => {
+    // const {
+    //   data: { files },
+    // } = response;
     const fetchTasks = [];
-    const filesKeysArr = Object.keys(files);
-    length = filesKeysArr.length - 1;
+    // const filesKeysArr = Object.keys(files);
+
+    // length = filesKeysArr.length - 1;
     let filesNames;
 
     if (selecthide) {
-      let endIndex = filesKeysArr.findIndex((value, index, arr) => {
-        return value.indexOf(endDate) > -1;
-      });
-      let startIndex = endIndex - diffdays;
-      filesNames = filesKeysArr.slice(startIndex, endIndex + 1);
+      filesNames = GetDateStr(-1 * diffdays, true);
     } else {
-      const startIndex = selectedValue >= length ? 0 : length - selectedValue;
-      // 选取已选中的天数
-      filesNames = filesKeysArr.slice(startIndex);
+      // const startIndex = selectedValue >= length ? 0 : length - selectedValue;
+      // // 选取已选中的天数
+      // filesNames = filesKeysArr.slice(startIndex);
+      filesNames = GetDateStr(-1 * selectedValue);
     }
 
     filesNames.forEach((fileName) => {
       // eslint-disable-next-line
-      const { type, filename, raw_url } = files[fileName] || {};
-      if (type === 'application/json' && /summaries/.test(filename)) {
-        fetchTasks.push(Axios.get(raw_url));
-      }
+      // const { type, filename, raw_url } = files[fileName] || {};
+      // if (type === 'application/json' && /summaries/.test(filename)) {
+      fetchTasks.push(
+        Axios.get(
+          `xxxxx/${fileName}`
+        )
+      );
+      // }
     });
     return Promise.all(fetchTasks);
   };
 
   const fetchSummariesData = () => {
-    let gistid = gistId || localStorage.getItem('gistId');
-    if (!gistid) {
-      return;
-    } else {
-      return Axios.get(`https://api.github.com/gists/${gistid}`)
-        .then((response) => fetchSingleFile(response))
-        .then((values) => {
-          const data = values.reduce((sum, current) => {
-            sum.push(current.data);
-            return sum;
-          }, []);
+    // let gistid = gistId || localStorage.getItem('gistId');
+    // if (!gistid) {
+    //   return;
+    // } else {
+    //   return Axios.get(`https://api.github.com/gists/${gistid}`)
+    //     .then((response) => fetchSingleFile(response))
+    //     .then((values) => {
+    //       const data = values.reduce((sum, current) => {
+    //         sum.push(current.data);
+    //         return sum;
+    //       }, []);
+    //       console.log('data: ', data);
 
-          const chartData = getLastData(data);
+    //       const chartData = getLastData(data);
 
-          setcolumnData(chartData);
-        });
-    }
+    //       setcolumnData(chartData);
+    //     });
+    // }
+    fetchSingleFile().then((values) => {
+      const data = values.reduce((sum, current) => {
+        sum.push(current.data);
+        return sum;
+      }, []);
+
+      const chartData = getLastData(data).reverse();
+      console.log('chartData: ', chartData);
+
+      setcolumnData(chartData);
+    });
   };
 
-  const onSearch = (value) => {
-    if (value) {
-      localStorage.setItem('gistId', value);
-      setgistId(value);
-    }
-  };
+  // const onSearch = (value) => {
+  //   if (value) {
+  //     localStorage.setItem('gistId', value);
+  //     setgistId(value);
+  //   }
+  // };
   const handleChange = (value) => {
     setselectedValue(value);
   };
@@ -142,14 +191,14 @@ function App() {
           <GithubOutlined />
           wakatime-dashboard pro
         </a>
-        <Search
+        {/* <Search
           align="center"
           onSearch={onSearch}
           allowClear={true}
           enterButton
           placeholder="Enter Your Gist Id"
           className="gist-input"
-        />
+        /> */}
       </Header>
       <Content style={{ padding: '0 50px' }}>
         <div className="waka-select">
@@ -176,7 +225,7 @@ function App() {
                   setselecthide(true);
                   setdiffdays(val[1].diff(val[0], 'days')); // diff days
                   setEndDate(val[1].format('YYYY-MM-DD'));
-                  setDates(val);
+                  // setDates(val);
                 }
               }}
               allowClear={true}
@@ -186,7 +235,7 @@ function App() {
         </div>
 
         <div className="site-layout-content">
-          {gistId && (
+          {columnData.length > 0 && (
             <div className="chart-detail">
               <Column columnData={columnData} />
               <Row>
@@ -203,7 +252,7 @@ function App() {
               <Report columnData={columnData} />
             </div>
           )}
-          {!gistId && (
+          {columnData.length == 0 && (
             <svg
               t="1623896018865"
               className="empty"
@@ -227,7 +276,7 @@ function App() {
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>
-        Power by{' '}
+        Power by
         <a href="https://github.com/fangge" target="_blank">
           MrFangge
         </a>

@@ -18,7 +18,7 @@ const DemoColumn: React.FC = (param) => {
     ],
   });
   const getFormateDate = (date) => {
-    return moment(date).format('YYYYMMDD');
+    return moment(date).format('YYYY-MM-DD');
   };
   const [data, setdata] = useState([]);
   const [data2, setdata2] = useState([]);
