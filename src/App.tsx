@@ -18,7 +18,7 @@ import { getLastData, secondsFormat, swap } from '@/utils/utils';
 import Column from '@/chart/column';
 import TreeMap from '@/chart/treemap';
 import Pie from '@/chart/pie';
-import Editors from '@/chart/editors';
+import Report from '@/chart/table';
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
@@ -53,6 +53,7 @@ function App() {
   const [columnData, setcolumnData] = useState([]);
   const [gistId, setgistId] = useState('');
   const [diffdays, setdiffdays] = useState(0);
+  const [dates, setDates] = useState([]);
   const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
 
   useEffect(() => {
@@ -78,10 +79,7 @@ function App() {
         return value.indexOf(endDate) > -1;
       });
       let startIndex = endIndex - diffdays;
-      filesNames = filesKeysArr.slice(
-        startIndex < 0 ? 0 : startIndex,
-        endIndex + 1
-      );
+      filesNames = filesKeysArr.slice(startIndex, endIndex + 1);
     } else {
       const startIndex = selectedValue >= length ? 0 : length - selectedValue;
       // 选取已选中的天数
@@ -106,7 +104,6 @@ function App() {
       return Axios.get(`https://api.github.com/gists/${gistid}`)
         .then((response) => fetchSingleFile(response))
         .then((values) => {
-          console.log('values: ', values);
           const data = values.reduce((sum, current) => {
             sum.push(current.data);
             return sum;
@@ -139,7 +136,7 @@ function App() {
     <Layout className="layout">
       <Header className="waka-hd">
         <a
-          href="https://github.com/fangge/wakatime-dashboard-pro"
+          href="https://github.com/fangge/wakatime-dashboardv2"
           target="_blank"
         >
           <GithubOutlined />
@@ -154,7 +151,7 @@ function App() {
           className="gist-input"
         />
       </Header>
-      <Content style={{ padding: '0 20px' }}>
+      <Content style={{ padding: '0 50px' }}>
         <div className="waka-select">
           <Select
             defaultValue="Last 7 Days"
@@ -173,13 +170,13 @@ function App() {
           <Space size={12}>
             <RangePicker
               onCalendarChange={(val) => {
-                setcolumnData([]);
                 if (val == null || val[1] == null) {
                   setselecthide(false);
                 } else {
                   setselecthide(true);
                   setdiffdays(val[1].diff(val[0], 'days')); // diff days
                   setEndDate(val[1].format('YYYY-MM-DD'));
+                  setDates(val);
                 }
               }}
               allowClear={true}
@@ -202,8 +199,8 @@ function App() {
                   <Pie columnData={columnData} />
                 </Col>
               </Row>
-
-              <Editors columnData={columnData}></Editors>
+              <h2>Range of projects Details</h2>
+              <Report columnData={columnData} />
             </div>
           )}
           {!gistId && (

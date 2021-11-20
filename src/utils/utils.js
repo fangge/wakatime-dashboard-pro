@@ -28,6 +28,7 @@ export function getLastData(data) {
     // 每天的统计数据
     const summary = data[index].data ? data[index].data[0] : data[index][0];
     lineChartData.push(summary);
+    
   }
   return lineChartData.reverse();
 }
