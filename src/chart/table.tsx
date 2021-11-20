@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-import { Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
+import { Table, Input, Popconfirm, Form, Typography } from 'antd';
+
+const { TextArea } = Input;
 
 interface Item {
   key: string;
@@ -12,7 +14,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
   dataIndex: string;
   title: any;
-  inputType: 'number' | 'text';
+  inputType: 'moreT' | 'text';
   record: Item;
   index: number;
   children: React.ReactNode;
@@ -28,7 +30,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   children,
   ...restProps
 }) => {
-  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+  const inputNode = inputType === 'moreT' ? <TextArea /> : <Input />;
 
   return (
     <td {...restProps}>
@@ -38,7 +40,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
           style={{ margin: 0 }}
           rules={[
             {
-              required: true,
               message: `Please Input ${title}!`,
             },
           ]}
@@ -74,8 +75,11 @@ const DataTable = (param) => {
     setEditingKey('');
   };
   const save = async (key: React.Key) => {
+    console.log('key: ', (await form.validateFields()) as Item);
     try {
       const row = (await form.validateFields()) as Item;
+      console.log('row: ', row);
+
 
       const newData = [...prolist];
       const index = newData.findIndex((item) => key === item.key);
@@ -160,7 +164,7 @@ const DataTable = (param) => {
       ...col,
       onCell: (record: Item) => ({
         record,
-        inputType: 'text',
+        inputType: col.dataIndex == 'projectDetail' ? 'moreT' : 'text',
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
