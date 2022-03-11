@@ -86,14 +86,54 @@ function App() {
       filesNames = filesKeysArr.slice(startIndex);
     }
 
+    // filesNames.forEach((fileName) => {
+    //   // eslint-disable-next-line
+    //   const { type, filename, raw_url } = files[fileName] || {};
+    //   if (type === 'application/json' && /summaries/.test(filename)) {
+    //     fetchTasks.push(Axios.get(raw_url));
+    //   }
+    // });
+    // return Promise.all(fetchTasks);
+    let urls = [];
     filesNames.forEach((fileName) => {
       // eslint-disable-next-line
       const { type, filename, raw_url } = files[fileName] || {};
       if (type === 'application/json' && /summaries/.test(filename)) {
-        fetchTasks.push(Axios.get(raw_url));
+        urls.push(raw_url);
       }
     });
-    return Promise.all(fetchTasks);
+    return urls;
+  };
+  const getData = (api) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        Axios.get(`${api}`)
+          .then((res) => {
+            resolve(res);
+          })
+          .catch((err) => {
+            resolve('error');
+          });
+      }, 2000);
+    });
+  };
+  const getDatas = (arr) => {
+    var promises = arr.map((item) => getData(item));
+    return Promise.all(promises)
+      .then((values) => {
+        let data = [];
+        values.map((v, index) => {
+          if (v != 'error') {
+            data.push(v.data);
+          }
+        });
+        const chartData = getLastData(data).reverse();
+        // console.log('chartData: ', chartData);
+        setcolumnData(chartData);
+      })
+      .catch((error) => {
+        // console.log(error);
+      });
   };
 
   const fetchSummariesData = () => {
@@ -101,18 +141,24 @@ function App() {
     if (!gistid) {
       return;
     } else {
-      return Axios.get(`https://api.github.com/gists/${gistid}`)
-        .then((response) => fetchSingleFile(response))
-        .then((values) => {
-          const data = values.reduce((sum, current) => {
-            sum.push(current.data);
-            return sum;
-          }, []);
+      return Axios.get(`https://api.github.com/gists/${gistid}`).then(
+        (response) => {
+          const dates = fetchSingleFile(response);
+          getDatas(dates).then(() => {
+            console.log('done~');
+          });
+        }
+      );
+      // .then((values) => {
+      //   const data = values.reduce((sum, current) => {
+      //     sum.push(current.data);
+      //     return sum;
+      //   }, []);
 
-          const chartData = getLastData(data);
+      //   const chartData = getLastData(data);
 
-          setcolumnData(chartData);
-        });
+      //   setcolumnData(chartData);
+      // });
     }
   };
 
