@@ -21,7 +21,6 @@
 
 export function getLastData(data) {
   const length = data.length;
-  const projectNames = {};
   const lineChartData = [];
 
   for (let index = length - 1; index >= 0; index--) {

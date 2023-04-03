@@ -14,7 +14,7 @@ import {
 import { GithubOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import Axios from 'axios';
-import { getLastData, secondsFormat, swap } from '@/utils/utils';
+import { getLastData } from '@/utils/utils';
 import Column from '@/chart/column';
 import TreeMap from '@/chart/treemap';
 import Pie from '@/chart/pie';
@@ -141,7 +141,7 @@ function App() {
     if (!gistid) {
       return;
     } else {
-      return Axios.get(`https://api.github.com/gists/${gistid}`).then(
+      return Axios.get(`https://api.github.com/gists/${gistid}?client_id=${'7ae184ba869452c9995c'}&client_secret=${'d72afa51b271b52d5c123a616d006747378d660b'}`).then(
         (response) => {
           const dates = fetchSingleFile(response);
           getDatas(dates).then(() => {
