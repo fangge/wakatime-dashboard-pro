@@ -6,7 +6,7 @@
 
 [Demo](https://wakatime.mrfangge.com/`)
 
-![en doc](README_en.md)
+[en doc](README_en.md)
 
 感谢大神弄了那么方便的 wakatime 图表展示，因为自己本身也是 wakatime 的忠实粉丝，很喜欢回看自己的编程数据
 

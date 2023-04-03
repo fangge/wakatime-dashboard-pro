@@ -6,7 +6,7 @@ Original project link: https://github.com/superman66/wakatime-dashboard
 
 [Demo](https://wakatime.mrfangge.com/`)
 
-![中文文档](README.md)
+[中文文档](README.md)
 
 Thanks to the great project by the master, which provides a convenient way to display wakatime charts. As a faithful fan of wakatime, I like to review my programming data.
 
