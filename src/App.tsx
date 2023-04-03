@@ -9,7 +9,7 @@ import {
   Input,
   message,
   Row,
-  Col,
+  Col
 } from 'antd';
 import { GithubOutlined } from '@ant-design/icons';
 import moment from 'moment';
@@ -29,24 +29,24 @@ function App() {
   const datePickerData = [
     {
       value: 7,
-      label: 'Last 7 Days',
+      label: 'Last 7 Days'
     },
     {
       value: 14,
-      label: 'Last 14 Days',
+      label: 'Last 14 Days'
     },
     {
       value: 30,
-      label: 'Last 30 Days',
+      label: 'Last 30 Days'
     },
     {
       value: 90,
-      label: 'Last 90 Days',
+      label: 'Last 90 Days'
     },
     {
       value: 365,
-      label: 'Last Year',
-    },
+      label: 'Last Year'
+    }
   ];
   const [selectedValue, setselectedValue] = useState(7);
   const [selecthide, setselecthide] = useState(false);
@@ -67,7 +67,7 @@ function App() {
 
   const fetchSingleFile = (response = {}) => {
     const {
-      data: { files },
+      data: { files }
     } = response;
     const fetchTasks = [];
     const filesKeysArr = Object.keys(files);
@@ -141,14 +141,14 @@ function App() {
     if (!gistid) {
       return;
     } else {
-      return Axios.get(`https://api.github.com/gists/${gistid}?client_id=${'7ae184ba869452c9995c'}&client_secret=${'d72afa51b271b52d5c123a616d006747378d660b'}`).then(
-        (response) => {
-          const dates = fetchSingleFile(response);
-          getDatas(dates).then(() => {
-            console.log('done~');
-          });
-        }
-      );
+      return Axios.get(
+        `https://api.github.com/gists/${gistid}?client_id=${'7ae184ba869452c9995c'}&client_secret=${'d72afa51b271b52d5c123a616d006747378d660b'}`
+      ).then((response) => {
+        const dates = fetchSingleFile(response);
+        getDatas(dates).then(() => {
+          console.log('done~');
+        });
+      });
       // .then((values) => {
       //   const data = values.reduce((sum, current) => {
       //     sum.push(current.data);
@@ -273,9 +273,9 @@ function App() {
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>
-        Power by{' '}
+        Power by
         <a href="https://github.com/fangge" target="_blank">
-          MrFangge
+          @MrFangge
         </a>
       </Footer>
     </Layout>
