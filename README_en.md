@@ -68,3 +68,9 @@ Add two parameters in the Settings of your project: ACCESS_TOKEN and BASE_DOMAIN
 
 - **ACCESS_TOKEN**：  Create a new token in [Personal access tokens](https://github.com/settings/tokens).
 - **BASE_DOMAIN**：`BASE_DOMAIN is` optional. If you have customized the domain of your GitHub Pages, you need to add it. If not, you can delete the --base parameter in the YML file yourself.
+
+## ChangeLog
+- 2025-04-08
+  - Add a heat map calendar for submissions, which counts the number of projects developed each day.
+  - Add Wakatime's TypeScript definitions to facilitate future expansion capabilities.
+  - Add IDE chat

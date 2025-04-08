@@ -11,14 +11,17 @@ import {
   Row,
   Col
 } from 'antd';
+import CalendarHeatMap from './chart/CalendarHeatMap';
 import { GithubOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import Axios from 'axios';
 import { getLastData } from '@/utils/utils';
 import Column from '@/chart/column';
+import Column2 from '@/chart/column2';
 import TreeMap from '@/chart/treemap';
 import Pie from '@/chart/pie';
 import Report from '@/chart/table';
+
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
@@ -235,6 +238,10 @@ function App() {
           {gistId && (
             <div className="chart-detail">
               <Column columnData={columnData} />
+              <h2>IDE Summary</h2>
+              <Column2 columnData={columnData} />
+              <h2>Current Year Projects Count</h2>
+              <CalendarHeatMap columnData={columnData} />
               <Row>
                 <Col span={12}>
                   <h2>General overview of projects time in the interval</h2>

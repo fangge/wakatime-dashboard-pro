@@ -14,4 +14,7 @@ export default defineConfig({
     port: 1024,
   },
   plugins: [reactRefresh()],
+  optimizeDeps: {
+    include: ['react-calendar-heatmap']
+  }
 });

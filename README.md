@@ -67,3 +67,10 @@ npm run build
 
 - **ACCESS_TOKEN**： 在[Personal access tokens](https://github.com/settings/tokens) 中新建 token
 - **BASE_DOMAIN**：BASE_DOMAIN 可选，如果你的 Github Page 自定义了域名，则需要添加，如果不需要，可自行在 yml 中删除构建的--base 参数
+
+## ChangeLog
+
+- 2025-04-08
+  - 增加类提交热力日历图，统计的是每天开发的项目数
+  - 增加wakatime的ts定义，方便后续扩展能力
+  - 增加IDE使用图表
