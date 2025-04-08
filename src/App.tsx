@@ -145,7 +145,7 @@ function App() {
       return;
     } else {
       return Axios.get(
-        `https://api.github.com/gists/${gistid}?client_id=${'7ae184ba869452c9995c'}&client_secret=${'d72afa51b271b52d5c123a616d006747378d660b'}`
+        `https://api.github.com/gists/${gistid}?client_id=${''}&client_secret=${''}`
       ).then((response) => {
         const dates = fetchSingleFile(response);
         getDatas(dates).then(() => {
