@@ -2,6 +2,7 @@ name: WakaTime DashBoard CI/CD
 
 # 触发条件：在 push 到 source 分支后触发
 on:
+  workflow_dispatch: # 手动触发
   push:
     branches: 
       - source
@@ -16,17 +17,17 @@ jobs:
 
     steps:
     - name: Checkout codes
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup node
       # 设置 node.js 环境
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
         node-version: 18
 
     - name: Cache node modules
       # 设置包缓存目录，避免每次下载
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -40,21 +41,26 @@ jobs:
     - name: Generate files
       # 编译 项目 文件，BASE_DOMAIN是你个人域名的构建基础路径，如果没有，可去掉--base参数
       run: |
-        vite build --base=${{ secrets.BASE_DOMAIN }}
-
+        vite build
+  
+    - name: Add CNAME file
+      run: echo "${{ secrets.BASE_DOMAIN }}" > dist/CNAME
+      
     - name: Deploy WakaTime Dashboard
-      env: 
-        # Github 仓库
-        GITHUB_REPO: github.com/fangge/wakatime-dashboard-pro
+      # env: 
+      #   # Github 仓库
+      #   GITHUB_REPO: github.com/fangge/wakatime-dashboard-pro
       # 将编译后的博客文件推送到指定仓库
       run: |
         cd ./dist && git init && git add .
-        git config user.name "mrfangge"
-        git config user.email "fangge-sun@163.com"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
         git add .
         git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
-        git push --force --quiet "https://${{ secrets.ACCESS_TOKEN }}@$GITHUB_REPO" master:master
-
+        git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+        git push --force --quiet origin master
+      # git push --force --quiet "https://${{ secrets.ACCESS_TOKEN }}@$GITHUB_REPO" master:master
+        
 
 
         
