@@ -41,7 +41,10 @@ jobs:
     - name: Generate files
       # 编译 项目 文件，BASE_DOMAIN是你个人域名的构建基础路径，如果没有，可去掉--base参数
       run: |
-        vite build --base=${{ secrets.BASE_DOMAIN }}
+        vite build --base=${{ secrets.BASE_DOMAIN }
+      
+    - name: Add CNAME file
+      run: echo "${{ secrets.BASE_DOMAIN }}" > dist/CNAME
 
     - name: Deploy WakaTime Dashboard
       # env: 
