@@ -74,3 +74,6 @@ npm run build
   - 增加类提交热力日历图，统计的是每天开发的项目数
   - 增加wakatime的ts定义，方便后续扩展能力
   - 增加IDE使用图表
+
+- 2025-12-15
+  - 更新vite、react和ant design的版本

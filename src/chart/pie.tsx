@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Pie } from '@ant-design/charts';
+import { Pie } from '@ant-design/plots';
 
-const DemoPie: React.FC = (param) => {
-  const [data, setdata] = useState([]);
+interface DemoPieProps {
+  columnData: any[];
+}
+
+const DemoPie: React.FC<DemoPieProps> = (param) => {
+  const [data, setdata] = useState<Array<{ type: string; value: number }>>([]);
   useEffect(() => {
-    let datalist = [];
+    let datalist: Record<string, any> = {};
     param.columnData.forEach((item) => {
       let languages = item.languages;
       languages.forEach((item2) => {
@@ -15,30 +19,30 @@ const DemoPie: React.FC = (param) => {
         }
       });
     });
-    let children = [];
+    let children: Array<{ type: string; value: number }> = [];
     for (let i in datalist) {
       children.push({
         type: i,
-        value: datalist[i].value,
+        value: datalist[i].value
       });
     }
     setdata(children);
   }, [param.columnData]);
 
   var config = {
-    appendPadding: 10,
-    data: data,
+    theme: param.isDark ? 'classicDark' : 'academy',
+    data,
     angleField: 'value',
     colorField: 'type',
-    radius: 0.8,
-    legend: false,
-    label: {
-      type: 'outer',
-      content: '{name}',
-      layout: [{ type: 'adjust-color' }],
-    },
-    interactions: [{ type: 'pie-legend-active' }, { type: 'element-active' }],
+    label: false,
     tooltip: false,
+    legend: {
+      color: {
+        title: false,
+        position: 'right',
+        rowPadding: 5
+      }
+    }
   };
   return <Pie {...config} />;
 };

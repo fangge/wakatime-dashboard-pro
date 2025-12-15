@@ -1,62 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import moment from 'moment';
-import { DualAxes, G2 } from '@ant-design/charts';
+import { DualAxes } from '@ant-design/plots';
 import { Statistic, Card, Col, Row } from 'antd';
 
-const DemoColumn: React.FC = (param) => {
-  G2.registerInteraction('element-link', {
-    start: [
-      {
-        trigger: 'interval:mouseenter',
-        action: 'element-link-by-color:link'
-      }
-    ],
-    end: [
-      {
-        trigger: 'interval:mouseleave',
-        action: 'element-link-by-color:unlink'
-      }
-    ]
-  });
-  const getFormateDate = (date) => {
+interface DemoColumnProps {
+  columnData: any[];
+}
+
+const DemoColumn: React.FC<DemoColumnProps> = (param) => {
+  const getFormateDate = (date: string) => {
     return moment(date).format('YYYY-MM-DD');
   };
-  const [data, setdata] = useState([]);
-  const [data2, setdata2] = useState([]);
+  const [data, setdata] = useState<any[]>([]);
+  const [data2, setdata2] = useState<any[]>([]);
   const [totalHours, settotalHours] = useState(0);
+  const [moreten, setmoreten] = useState(0);
   const [longestDate, setlongestDate] = useState({
     date: '',
     time: 0
   });
-  const [shortestDate, setshortestDate] = useState({
-    project: '',
-    time: 0
-  });
+  const [avgtime, setavgtime] = useState('0');
   const [longestProject, setlongestProject] = useState({
     project: '',
     time: 0
   });
+  const [noworkingdays, setnoworkingdays] = useState(0);
+  const [workdays, setworkdays] = useState(0);
   const [darkmode, setdarkmode] = useState(false);
-  const getMaxValue = (projects) => {
-    console.log('projects: ', projects);
+
+  const getMaxValue = (projects: Record<string, number>) => {
+
     for (const key in projects) {
       if (projects.hasOwnProperty(key) && projects[key] === 0) {
         delete projects[key];
       }
     }
     let maxKey = '';
-    let minKey = '';
-    const maxValue = Math.max(...Object.values(projects));
-    const minValue = Math.min(...Object.values(projects));
-    console.log('minValue: ', minValue);
+    const maxValue = Math.max(...(Object.values(projects) as number[]));
     for (const key in projects) {
       if (projects.hasOwnProperty(key)) {
         const value = projects[key];
         if (value == maxValue) {
           maxKey = key;
-        }
-        if (value == minValue) {
-          minKey = key;
         }
       }
     }
@@ -64,60 +49,72 @@ const DemoColumn: React.FC = (param) => {
       project: maxKey,
       time: maxValue
     });
-    setshortestDate({
-      project: minKey,
-      time: minValue
-    });
   };
+
   useEffect(() => {
     if (
       window.matchMedia &&
       window.matchMedia('(prefers-color-scheme: dark)').matches
     ) {
-      // dark mode do something
       setdarkmode(true);
     }
-    let datalist = [] as any;
-    let totallist = [] as any;
+    let datalist: any[] = [];
+    let totallist: any[] = [];
     let tHours = 0;
+    let workdays = 0;
+    let noworkdays = 0;
+    let morethanten = 0;
+    let hasprojctdays = 0;
     param.columnData.forEach((element) => {
       const currentDate = getFormateDate(element.range.date);
 
       let total_time = 0;
       if (element.projects.length > 0) {
-        element.projects.forEach((project) => {
+        hasprojctdays++;
+        if (new Date(element.range.date).getDay() > 5) {
+          noworkdays++;
+        }
+        element.projects.forEach((project: any) => {
           total_time += project.total_seconds;
           const hours = project.total_seconds / 3600;
           datalist.push({
-            date: currentDate,
-            projects: project.name,
+            time: currentDate,
             value: hours,
+            type: project.name,
             text: project.text
           });
         });
       } else {
         datalist.push({
-          date: currentDate,
-          projects: '',
+          time: currentDate,
           value: 0,
+          type: '',
           text: 'no project'
         });
       }
 
       totallist.push({
-        date: currentDate,
-        total: total_time / 3600
+        time: currentDate,
+        count: total_time / 3600
       });
       tHours += total_time;
+      if (total_time / 3600 > 10) {
+        morethanten++;
+      }
+      if (total_time != 0) {
+        workdays++;
+      }
     });
-
+    setworkdays(hasprojctdays);
+    setnoworkingdays(noworkdays);
     setdata(datalist);
+    setmoreten(morethanten);
 
     if (datalist.length > 0) {
-      const projects = {};
+      const projects: Record<string, number> = {};
 
       for (let i = 0; i < datalist.length; i++) {
-        const project = datalist[i].projects;
+        const project = datalist[i].type;
         const time = datalist[i].value;
 
         if (!projects.hasOwnProperty(project)) {
@@ -128,96 +125,127 @@ const DemoColumn: React.FC = (param) => {
       }
       getMaxValue(projects);
     }
-
     settotalHours(tHours / 3600);
+    setavgtime((tHours / 3600 / workdays).toFixed(2));
     setdata2(totallist);
     if (totallist.length > 0) {
       const maxDateElement = totallist.reduce((prev, current) => {
-        return current.total > prev.total ? current : prev;
+        return current.count > prev.count ? current : prev;
       });
       setlongestDate({
-        date: maxDateElement.date,
-        time: maxDateElement.total
+        date: maxDateElement.time,
+        time: maxDateElement.count
       });
     }
   }, [param.columnData]);
 
-  const config = {
-    data: [data, data2],
-    isStack: true,
-    xField: 'date',
-    yField: ['value', 'total'],
-    geometryOptions: [
-      {
-        geometry: 'column',
-        isStack: true,
-        seriesField: 'projects',
-        scrollbar: { type: 'horizontal' },
-        tooltip: {
-          formatter: function formatter(datum) {
-            let time = moment.duration(datum.value * 3600, 'seconds');
-            return {
-              name: datum.projects,
-              value: `${moment({
-                h: time.hours(),
-                m: time.minutes(),
-                s: time.seconds()
-              }).format('HH:mm:ss')}h`
-            };
+  const charData = useCallback(() => {
+    if (data.length > 0 && data2.length > 0) {
+      const config = {
+        xField: 'time',
+        legend: true,
+        slider: {
+          x: {
+            values: [0, 1]
           }
-        }
-      },
-      {
-        geometry: 'line',
-        lineStyle: { lineDash: [4, 4] },
-        point: {
-          size: 5,
-          shape: 'diamond'
         },
-        tooltip: {
-          formatter: function formatter(datum) {
-            let time = moment.duration(datum.total * 3600, 'seconds');
-            return {
-              name: datum.date,
-              value: `Total ${moment({
-                h: time.hours(),
-                m: time.minutes(),
-                s: time.seconds()
-              }).format('HH:mm:ss')}h`
-            };
+        interaction: {
+          tooltip: {
+            render: (e: any, { title, items }: any) => {
+              return (
+                <div key={title}>
+                  <h4 style={{ marginBottom: 8 }}>{title}</h4>
+                  {items.map((item: any) => {
+                    const { name, value, color } = item;
+
+                    // 格式化时间显示
+                    let displayValue = value;
+                    if (name !== 'count') {
+                      // 项目时间
+                      const time = moment.duration(value * 3600, 'seconds');
+                      displayValue =
+                        moment({
+                          h: time.hours(),
+                          m: time.minutes(),
+                          s: time.seconds()
+                        }).format('HH:mm:ss') + 'h';
+                    } else {
+                      // 总计时间
+                      const time = moment.duration(value * 3600, 'seconds');
+                      displayValue =
+                        'Total ' +
+                        moment({
+                          h: time.hours(),
+                          m: time.minutes(),
+                          s: time.seconds()
+                        }).format('HH:mm:ss') +
+                        'h';
+                    }
+
+                    return (
+                      <div key={name} style={{ marginBottom: 4 }}>
+                        <div
+                          style={{
+                            margin: 0,
+                            display: 'flex',
+                            justifyContent: 'space-between'
+                          }}
+                        >
+                          <div>
+                            <span
+                              style={{
+                                display: 'inline-block',
+                                width: 6,
+                                height: 6,
+                                borderRadius: '50%',
+                                backgroundColor: color,
+                                marginRight: 6
+                              }}
+                            ></span>
+                            <span>
+                              {name === 'count' ? title + ':' : name + ':'}
+                            </span>
+                          </div>
+                          <b style={{ marginLeft: 16 }}>{displayValue}</b>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            }
           }
-        }
-      }
-    ],
-    slider: {},
-    limitInPlot: false,
-    padding: [20, 20, 50, 20],
-    meta: {
-      ['date']: {
-        sync: false
-      }
-    },
-    interactions: [
-      { type: 'element-highlight-by-color' },
-      { type: 'element-link' }
-    ],
-    theme: darkmode ? 'dark' : '',
-    legend: true
-  };
+        },
+        children: [
+          {
+            data: data,
+            type: 'interval',
+            yField: 'value',
+            stack: true,
+            colorField: 'type',
+            style: { maxWidth: 80 }
+          },
+          {
+            data: data2,
+            type: 'line',
+            yField: 'count',
+            style: { lineWidth: 2 }
+          }
+        ]
+      };
+      return (
+        <DualAxes
+          {...config}
+          theme={param.isDark ? 'classicDark' : 'academy'}
+        />
+      );
+    }
+  }, [data, data2, param.isDark]);
 
   return (
-    <>
-      <DualAxes
-        {...config}
-        onReady={(plot) => {
-          plot.on('plot:click', (evt) => {
-            const { x, y } = evt;
-            const { xField } = plot.options;
-            const tooltipData = plot.chart.getTooltipItems({ x, y });
-          });
-        }}
-      />
+    <div>
       <h2>WakaTime Summary</h2>
+      {charData()}
       <Row gutter={16}>
         <Col span={12}>
           <Card>
@@ -228,7 +256,7 @@ const DemoColumn: React.FC = (param) => {
           </Card>
         </Col>
         <Col span={12}>
-          <Card>
+          <Card >
             <Statistic
               title="The date that took the longest hours"
               value={longestDate.date + '/' + longestDate.time.toFixed(1) + 'h'}
@@ -245,14 +273,24 @@ const DemoColumn: React.FC = (param) => {
         </Col>
         <Col span={12}>
           <Card>
+            <Statistic title="Average Working Hour" value={avgtime} />
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card>
+            <Statistic title="Weekend Work Days" value={noworkingdays} />
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card>
             <Statistic
-              title="Projects that took the shortest"
-              value={shortestDate.project}
+              title="Works Days More than 10h / Works Days Total"
+              value={moreten + '/' + workdays}
             />
           </Card>
         </Col>
       </Row>
-    </>
+    </div>
   );
 };
 

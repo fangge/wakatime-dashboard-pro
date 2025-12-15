@@ -10,11 +10,5 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'), // src 路径
     },
   },
-  server: {
-    port: 1024,
-  },
   plugins: [reactRefresh()],
-  optimizeDeps: {
-    include: ['react-calendar-heatmap']
-  }
 });

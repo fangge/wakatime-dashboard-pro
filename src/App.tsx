@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import 'antd/dist/antd.css';
 import './App.scss';
 import {
+  ConfigProvider,
+  theme,
   Layout,
   Select,
   DatePicker,
   Space,
   Input,
-  message,
   Row,
-  Col
+  Col,
+  App as AntdApp
 } from 'antd';
 import CalendarHeatMap from './chart/CalendarHeatMap';
 import { GithubOutlined } from '@ant-design/icons';
@@ -17,18 +18,17 @@ import moment from 'moment';
 import Axios from 'axios';
 import { getLastData } from '@/utils/utils';
 import Column from '@/chart/column';
-import Column2 from '@/chart/column2';
 import TreeMap from '@/chart/treemap';
 import Pie from '@/chart/pie';
 import Report from '@/chart/table';
-
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
 const { Search } = Input;
 const { RangePicker } = DatePicker;
 
-function App() {
+function AppContent() {
+  const { message } = AntdApp.useApp();
   const datePickerData = [
     {
       value: 7,
@@ -58,7 +58,6 @@ function App() {
   const [diffdays, setdiffdays] = useState(0);
   const [dates, setDates] = useState([]);
   const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
-
   useEffect(() => {
     fetchSummariesData();
     if (localStorage.getItem('gistId')) {
@@ -183,109 +182,131 @@ function App() {
   };
   return (
     <Layout className="layout">
-      <Header className="waka-hd">
-        <a
-          href="https://github.com/fangge/wakatime-dashboardv2"
-          target="_blank"
-        >
-          <GithubOutlined />
-          wakatime-dashboard pro
-        </a>
-        <Search
-          align="center"
-          onSearch={onSearch}
-          allowClear={true}
-          enterButton
-          placeholder="Enter Your Gist Id"
-          className="gist-input"
-        />
-      </Header>
-      <Content style={{ padding: '0 50px' }}>
-        <div className="waka-select">
-          <Select
-            defaultValue="Last 7 Days"
-            className="range-select"
-            onChange={handleChange}
-            disabled={selecthide}
+        <Header className="waka-hd">
+          <a
+            href="https://github.com/fangge/wakatime-dashboardv2"
+            target="_blank"
           >
-            {datePickerData.map((item) => {
-              return (
-                <Option key={item.value} value={item.value}>
-                  {item.label}
-                </Option>
-              );
-            })}
-          </Select>
-          <Space size={12}>
-            <RangePicker
-              onCalendarChange={(val) => {
-                if (val == null || val[1] == null) {
-                  setselecthide(false);
-                } else {
-                  setselecthide(true);
-                  setdiffdays(val[1].diff(val[0], 'days')); // diff days
-                  setEndDate(val[1].format('YYYY-MM-DD'));
-                  setDates(val);
-                }
-              }}
-              allowClear={true}
-              disabledDate={handleData}
-            />
-          </Space>
-        </div>
-
-        <div className="site-layout-content">
-          {gistId && (
-            <div className="chart-detail">
-              <Column columnData={columnData} />
-              <h2>IDE Summary</h2>
-              <Column2 columnData={columnData} />
-              <h2>Current Year Projects Count</h2>
-              <CalendarHeatMap columnData={columnData} />
-              <Row>
-                <Col span={12}>
-                  <h2>General overview of projects time in the interval</h2>
-                  <TreeMap columnData={columnData} />
-                </Col>
-                <Col span={12}>
-                  <h2>Languages</h2>
-                  <Pie columnData={columnData} />
-                </Col>
-              </Row>
-              <h2>Range of projects Details</h2>
-              <Report columnData={columnData} />
-            </div>
-          )}
-          {!gistId && (
-            <svg
-              t="1623896018865"
-              className="empty"
-              viewBox="0 0 1024 1024"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              p-id="2881"
+            <GithubOutlined />
+            wakatime-dashboard pro
+          </a>
+          <Search
+            align="center"
+            onSearch={onSearch}
+            allowClear={true}
+            enterButton
+            placeholder="Enter Your Gist Id"
+            className="gist-input"
+          />
+        </Header>
+        <Content style={{ padding: '0 50px' }}>
+          <div className="waka-select">
+            <Select
+              defaultValue="Last 7 Days"
+              className="range-select"
+              onChange={handleChange}
+              disabled={selecthide}
             >
-              <path
-                d="M64 640h64a32 32 0 0 0 0-64h-30.432a412.96 412.96 0 0 1 98.784-238.4l21.344 21.344a31.904 31.904 0 0 0 45.248 0 32 32 0 0 0 0-45.248l-21.344-21.344A412.992 412.992 0 0 1 480 193.568V224a32 32 0 0 0 64 0v-30.432a412.96 412.96 0 0 1 238.4 98.784l-21.344 21.344a32 32 0 1 0 45.248 45.248l21.344-21.344A412.992 412.992 0 0 1 926.432 576H896a32 32 0 0 0 0 64h64a32 32 0 0 0 32-32c0-127.84-49.888-248.32-140.576-339.392v-0.032l-0.064-0.032A477.984 477.984 0 0 0 512 128C384.16 128 263.68 177.888 172.608 268.576h-0.032l-0.032 0.064A477.984 477.984 0 0 0 32 608a32 32 0 0 0 32 32z"
-                fill="#5465CF"
-                p-id="2882"
-              ></path>
-              <path
-                d="M474.88 684.48l-237.888-105.728a32 32 0 1 0-25.984 58.496l237.664 105.44A63.84 63.84 0 0 0 512 800c35.296 0 64-28.704 64-64s-28.704-64-64-64a63.36 63.36 0 0 0-37.12 12.48zM976 736a16 16 0 1 0 0-32h-64a16 16 0 0 0-16 16v128a16 16 0 1 0 32 0V800h48a16 16 0 1 0 0-32H928v-32h48zM48 864h64a16 16 0 1 0 0-32H64v-32h48a16 16 0 1 0 0-32H64v-32h48a16 16 0 1 0 0-32h-64a16 16 0 0 0-16 16v128a16 16 0 0 0 16 16z"
-                fill="#5465CF"
-                p-id="2883"
-              ></path>
-            </svg>
-          )}
-        </div>
-      </Content>
-      <Footer style={{ textAlign: 'center' }}>
-        Power by
-        <a href="https://github.com/fangge" target="_blank">
-          @MrFangge
-        </a>
-      </Footer>
+              {datePickerData.map((item) => {
+                return (
+                  <Option key={item.value} value={item.value}>
+                    {item.label}
+                  </Option>
+                );
+              })}
+            </Select>
+            <Space size={12}>
+              <RangePicker
+                onCalendarChange={(val) => {
+                  if (val == null || val[1] == null) {
+                    setselecthide(false);
+                  } else {
+                    setselecthide(true);
+                    setdiffdays(val[1].diff(val[0], 'days')); // diff days
+                    setEndDate(val[1].format('YYYY-MM-DD'));
+                    setDates(val);
+                  }
+                }}
+                allowClear={true}
+                disabledDate={handleData}
+              />
+            </Space>
+          </div>
+
+          <div className="site-layout-content">
+            {gistId && (
+              <div className="chart-detail">
+                <Column columnData={columnData} />
+                <h2>Current Year Projects Count</h2>
+                <CalendarHeatMap columnData={columnData} />
+                <Row>
+                  <Col span={12}>
+                    <h2>General overview of projects time in the interval</h2>
+                    <TreeMap columnData={columnData} />
+                  </Col>
+                  <Col span={12}>
+                    <h2>Languages</h2>
+                    <Pie columnData={columnData} />
+                  </Col>
+                </Row>
+                <h2>Range of projects Details</h2>
+                <Report columnData={columnData} />
+              </div>
+            )}
+            {!gistId && (
+              <svg
+                t="1623896018865"
+                className="empty"
+                viewBox="0 0 1024 1024"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                p-id="2881"
+              >
+                <path
+                  d="M64 640h64a32 32 0 0 0 0-64h-30.432a412.96 412.96 0 0 1 98.784-238.4l21.344 21.344a31.904 31.904 0 0 0 45.248 0 32 32 0 0 0 0-45.248l-21.344-21.344A412.992 412.992 0 0 1 480 193.568V224a32 32 0 0 0 64 0v-30.432a412.96 412.96 0 0 1 238.4 98.784l-21.344 21.344a32 32 0 1 0 45.248 45.248l21.344-21.344A412.992 412.992 0 0 1 926.432 576H896a32 32 0 0 0 0 64h64a32 32 0 0 0 32-32c0-127.84-49.888-248.32-140.576-339.392v-0.032l-0.064-0.032A477.984 477.984 0 0 0 512 128C384.16 128 263.68 177.888 172.608 268.576h-0.032l-0.032 0.064A477.984 477.984 0 0 0 32 608a32 32 0 0 0 32 32z"
+                  fill="#5465CF"
+                  p-id="2882"
+                ></path>
+                <path
+                  d="M474.88 684.48l-237.888-105.728a32 32 0 1 0-25.984 58.496l237.664 105.44A63.84 63.84 0 0 0 512 800c35.296 0 64-28.704 64-64s-28.704-64-64-64a63.36 63.36 0 0 0-37.12 12.48zM976 736a16 16 0 1 0 0-32h-64a16 16 0 0 0-16 16v128a16 16 0 1 0 32 0V800h48a16 16 0 1 0 0-32H928v-32h48zM48 864h64a16 16 0 1 0 0-32H64v-32h48a16 16 0 1 0 0-32H64v-32h48a16 16 0 1 0 0-32h-64a16 16 0 0 0-16 16v128a16 16 0 0 0 16 16z"
+                  fill="#5465CF"
+                  p-id="2883"
+                ></path>
+              </svg>
+            )}
+          </div>
+        </Content>
+        <Footer style={{ textAlign: 'center' }}>
+          Power by
+          <a href="https://github.com/fangge" target="_blank">
+            @MrFangge
+          </a>
+        </Footer>
     </Layout>
+  );
+}
+
+function App() {
+  const [isDark, setIsDark] = useState(false);
+  
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    setIsDark(mq.matches);
+    const listener = (e: MediaQueryListEvent) => setIsDark(e.matches);
+    mq.addEventListener('change', listener);
+    return () => mq.removeEventListener('change', listener);
+  }, []);
+
+  return (
+    <ConfigProvider
+      theme={{
+        algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm
+      }}
+    >
+      <AntdApp>
+        <AppContent />
+      </AntdApp>
+    </ConfigProvider>
   );
 }
 

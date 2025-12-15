@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Treemap } from '@ant-design/charts';
+import { Treemap } from '@ant-design/plots';
 
-const DemoTreemap: React.FC= (param) => {
-  const [data, setdata] = useState({});
+interface DemoTreemapProps {
+  columnData: any[];
+}
+
+const DemoTreemap: React.FC<DemoTreemapProps> = (param) => {
+  const [data, setdata] = useState<{
+    name: string;
+    children: Array<{ name: string; value: number }>;
+  }>({ name: 'root', children: [] });
   useEffect(() => {
-    let datalist = [];
+    let datalist: Record<string, any> = {};
     param.columnData.forEach((item) => {
       let projects = item.projects;
       projects.forEach((item2) => {
@@ -12,38 +19,56 @@ const DemoTreemap: React.FC= (param) => {
           datalist[item2.name].value += item2.total_seconds;
         } else {
           datalist[item2.name] = { value: item2.total_seconds };
-          // datalist.push({
-          //   name: item2.name,
-          //   value: item2.total_seconds,
-          // });
         }
       });
-      let children = [];
-      for (let i in datalist) {
+    });
+
+    let children: { name: string; value: number }[] = [];
+    for (let i in datalist) {
+      if (datalist[i].value > 0) {
         children.push({
           name: i,
-          value: datalist[i].value,
+          value: Math.floor(datalist[i].value / 3600)
         });
       }
-      setdata({
-        name: 'root',
-        children,
-      });
+    }
+    setdata({
+      name: 'root',
+      children
     });
   }, [param.columnData]);
 
   var config = {
-    data: data,
-    colorField: 'name',
-    tooltip: false,
-    label: {
-      position: 'middle',
-      layout: [
-        { type: 'adjust-color' },
-      ],
+    theme: param.isDark ? 'classicDark' : 'academy',
+    tooltip: {
+      title: (item) => {
+        return item.value + 'h';
+      }
     },
+    scale: {
+      color: {
+        range: [
+          '#4e79a7',
+          '#f28e2c',
+          '#e15759',
+          '#76b7b2',
+          '#59a14f',
+          '#edc949',
+          '#af7aa1',
+          '#ff9da7',
+          '#9c755f',
+          '#bab0ab',
+        ],
+      },
+    },
+    data,
+    colorField: 'value',
+    valueField: 'value',
+
+    legend: false
   };
   return <Treemap {...config} />;
 };
+
 
 export default DemoTreemap;

@@ -53,21 +53,17 @@ const EditableCell: React.FC<EditableCellProps> = ({
   );
 };
 
-const DataTable = (param) => {
+interface DataTableProps {
+  columnData: any[];
+}
+
+const DataTable: React.FC<DataTableProps> = (param) => {
   const [prolist, setprolist] = useState([]);
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
 
   const isEditing = (record: Item) => record.key === editingKey;
   const edit = (record: Partial<Item> & { key: React.Key }) => {
-    console.log('record: ', record);
-    form.setFieldsValue({
-      ProjectName: '',
-      projectDetail: '',
-      projectStartTime: '',
-      projectEndTime: '',
-      ...record,
-    });
     setEditingKey(record.key);
   };
 
@@ -75,12 +71,9 @@ const DataTable = (param) => {
     setEditingKey('');
   };
   const save = async (key: React.Key) => {
-    console.log('key: ', (await form.validateFields()) as Item);
+
     try {
       const row = (await form.validateFields()) as Item;
-      console.log('row: ', row);
-
-
       const newData = [...prolist];
       const index = newData.findIndex((item) => key === item.key);
       if (index > -1) {
@@ -173,8 +166,8 @@ const DataTable = (param) => {
   });
 
   useEffect(() => {
-    let plist = {},
-      plistArr = [];
+    let plist: Record<string, any> = {};
+    let plistArr: any[] = [];
     param.columnData.forEach((item) => {
       item.projects.forEach((item2) => {
         if (plist[item2.name]) {

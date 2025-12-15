@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
-import { WakaTimeStats } from '../../types/waketime';
+import { WakaTimeStats } from '../types/waketime';
 
-const CalendarHeatMap: React.FC = (param: { columnData: WakaTimeStats[] }) => {
+interface CalendarHeatMapProps {
+  columnData: WakaTimeStats[];
+}
+
+const CalendarHeatMap: React.FC<CalendarHeatMapProps> = (param) => {
   const { columnData } = param;
-  console.log('columnData: ', columnData);
+
   const nowYears = new Date().getFullYear();
   const startDate = `${nowYears}-01-01`;
   const endDate = `${nowYears}-12-31`;
